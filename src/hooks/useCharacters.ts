@@ -17,20 +17,20 @@ export function useCharacters() {
     }, [name, status]);
 
     useEffect(() => {
-  const timeout = setTimeout(() => {
-    setLoading(true);
+    const timeout = setTimeout(() => {
+        setLoading(true);
 
-    getCharacters({ page, name, status })
-        .then((data) => {
-            setCharacters(data.results);
-            setTotal(data.info.count);
-        })
-        .catch((error) => {
-            if (error?.code === "ERR_CANCELED") return;
-        })
-        .finally(() => setLoading(false));
+        getCharacters({ page, name, status })
+            .then((data) => {
+                setCharacters(data.results);
+                setTotal(data.info.count);
+            })
+            .catch((error) => {
+                if (error?.code === "ERR_CANCELED") return;
+            })
+            .finally(() => setLoading(false));
 
-    }, 400); 
+        }, 600); 
 
     // cleanup: cancela el debounce si cambian deps
     return () => clearTimeout(timeout);

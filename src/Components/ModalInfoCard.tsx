@@ -1,7 +1,24 @@
 import { Modal, Avatar, Descriptions, Tag } from "antd";
+import { useState, useEffect } from "react";
 import type { CharacterModalProps } from "../types/modal.type";
 
 export function CharacterModal({ character, onClose }: CharacterModalProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (character) {
+      setIsOpen(true);
+    }
+  }, [character]);
+
+  const handleClose = () => {
+    setIsOpen(false);
+
+    setTimeout(() => {
+      onClose();
+    }, 300); 
+  };
+
   const statusMap = {
     Alive: { text: "Vivo", color: "green" },
     Dead: { text: "Muerto", color: "red" },
@@ -10,22 +27,22 @@ export function CharacterModal({ character, onClose }: CharacterModalProps) {
 
   const genderMap = {
     Female: "Femenino",
-    Male:"Masculino",
+    Male: "Masculino",
     Genderless: "Sin género",
     unknown: "Desconocido"
   }
 
   const gender = genderMap[character.gender] || character.gender;
-
   const status = statusMap[character.status];
 
   return (
     <Modal
-      open={true}
-      onCancel={onClose}
+      open={isOpen}
+      onCancel={handleClose}
       footer={null}
       title={character.name}
       centered
+      afterClose={onClose} 
     >
       <div style={{ textAlign: "center", marginBottom: 16 }}>
         <Avatar

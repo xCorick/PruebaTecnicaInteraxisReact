@@ -95,10 +95,6 @@ export function CharacterTable({
                     pageSize: 20,
                     showSizeChanger: false,
                 }}
-                onRow={(record) => ({
-                    onClick: () => onSelect(record),
-                    style: { cursor: "pointer" },
-                })}
             />
         </div>
     );
