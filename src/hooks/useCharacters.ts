@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { getCharacters } from "../Services/data.service";
 import type { ApiCharacterResponse } from "../types/apiResponse.type";
-import type { CharacterParams } from "../types/character.type";
+import type { CharacterInfo, CharacterParams } from "../types/character.type";
 
 export function useCharacters() {
   const [characters, setCharacters] = useState<ApiCharacterResponse["results"]>([]);
-  const [selected, setSelected] = useState<ApiCharacterResponse["results"][0] | null>(null);
+  const [selected, setSelected] = useState<CharacterInfo | null>(null);
   const [page, setPage] = useState(1);
   const [name, setName] = useState("");
   const [status, setStatus] = useState<CharacterParams["status"]>("");
@@ -17,14 +17,23 @@ export function useCharacters() {
     }, [name, status]);
 
     useEffect(() => {
-        setLoading(true);
+  const timeout = setTimeout(() => {
+    setLoading(true);
 
-        getCharacters({ page, name, status })
+    getCharacters({ page, name, status })
         .then((data) => {
             setCharacters(data.results);
             setTotal(data.info.count);
         })
+        .catch((error) => {
+            if (error?.code === "ERR_CANCELED") return;
+        })
         .finally(() => setLoading(false));
+
+    }, 400); 
+
+    // cleanup: cancela el debounce si cambian deps
+    return () => clearTimeout(timeout);
 
     }, [page, name, status]);
 
