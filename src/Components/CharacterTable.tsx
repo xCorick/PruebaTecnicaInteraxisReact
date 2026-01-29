@@ -50,6 +50,7 @@ export function CharacterTable({
                 current: page,
                 total: total,
                 onChange: onPageChange,
+                pageSize: 20,
                 showSizeChanger: false,
             }}
             onRow={(record) => ({
